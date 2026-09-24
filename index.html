@@ -7,7 +7,7 @@
 <title>AFK Realms</title>
 
 <!-- VK Bridge SDK. Без onload/onerror: доступность определяется опросом window.vkBridge с таймаутом (см. waitForVkBridge) -->
-<script src="https://unpkg.com/@vkontakte/vk-bridge/dist/index.umd.js"></script>
+<script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
 
 <style>
 /* ==========================================================================
@@ -5555,18 +5555,13 @@ body.modal-open { overflow: hidden; }
 
   const audio = new AudioManager();
 
-  // Пути к файлам-заглушкам: положите свои аудио сюда (или поменяйте url ниже на свои).
-  // Отсутствие файла не ломает игру — playSfx/playBgm просто ничего не сыграют.
-  const AUDIO_MANIFEST = [
-    { name: 'bgm',      url: 'assets/audio/bgm-theme.mp3' },
-    { name: 'click',    url: 'assets/audio/click.mp3' },
-    { name: 'crit',     url: 'assets/audio/crit.mp3' },
-    { name: 'attack',   url: 'assets/audio/attack.mp3' },
-    { name: 'coin',     url: 'assets/audio/coin.mp3' },
-    { name: 'purchase', url: 'assets/audio/purchase.mp3' },
-    { name: 'levelup',  url: 'assets/audio/levelup.mp3' }
-  ];
-  const MENU_BG_URL = 'assets/images/menu-bg.jpg';         // фон главного меню; при 404 остаётся тёмный градиент
+  // Звук временно отключён: аудиофайлов в репозитории ещё нет, а обращаться к несуществующим
+  // путям на GitHub Pages не нужно (лишние 404 в логах). Чтобы вернуть звук, верните элементы
+  // сюда (пути — относительные, без ведущего слеша, например 'assets/audio/click.mp3') —
+  // весь остальной код (AudioManager, слайдеры громкости, точки воспроизведения в бою) не менялся
+  // и заработает как прежде, ничего больше трогать не нужно.
+  const AUDIO_MANIFEST = [];
+  const MENU_BG_URL = null;         // фон меню отключён — используется CSS-градиент из .menu-bg
 
   /* ---------- Прелоадер: картинка + звуки, параллельно с boot() (SDK/сохранение) ---------- */
 
@@ -5580,12 +5575,11 @@ body.modal-open { overflow: hidden; }
   }
 
   async function preloadAssets() {
-    setLoading('Загрузка ассетов…');
+    setLoading('Загрузка…');
     const [bgUrl] = await Promise.all([
-      preloadImage(MENU_BG_URL),
+      MENU_BG_URL ? preloadImage(MENU_BG_URL) : Promise.resolve(null),
       audio.loadAll(AUDIO_MANIFEST, (done, total) => {
-        setLoadingProgress(done / total);
-        setLoading('Загрузка звука… ' + done + '/' + total);
+        if (total > 0) { setLoadingProgress(done / total); setLoading('Загрузка звука… ' + done + '/' + total); }
       })
     ]);
     if (bgUrl) {
