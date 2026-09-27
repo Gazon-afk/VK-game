@@ -83,9 +83,9 @@ body {
   background: linear-gradient(180deg, var(--panel-hi), var(--panel));
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  padding: 10px 12px 12px;
+  padding: 7px 10px 8px;
   display: grid;
-  gap: 10px;
+  gap: 6px;
 }
 
 .hud-top {
@@ -100,15 +100,15 @@ body {
 .gold {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 5px 14px 5px 6px;
+  gap: 6px;
+  padding: 3px 10px 3px 4px;
   border-radius: 999px;
   background: #0b0f1c;
   border: 1px solid #3a3320;
 }
 .coin {
-  width: 24px;
-  height: 24px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   background:
     radial-gradient(circle at 35% 30%, #fff3b8 0 18%, transparent 19%),
@@ -118,26 +118,26 @@ body {
 .gold-value {
   font-variant-numeric: tabular-nums;
   font-weight: 700;
-  font-size: 1.05rem;
+  font-size: .9rem;
   color: var(--gold);
   letter-spacing: .02em;
   min-width: 2ch;
 }
 
 /* Кошелёк: золото + ключи */
-.wallet { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.wallet { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 .keys, .shards {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 5px 14px 5px 6px;
+  gap: 6px;
+  padding: 3px 10px 3px 4px;
   border-radius: 999px;
   background: #0b0f1c;
   border: 1px solid #1f3a4d;
 }
 .key-ico {
-  width: 24px;
-  height: 24px;
+  width: 18px;
+  height: 18px;
   flex: none;
   display: grid;
   place-items: center;
@@ -146,7 +146,7 @@ body {
   background: radial-gradient(circle at 50% 50%, #8fdcff 0 60%, #3a9fd1 62% 100%);
   box-shadow: inset 0 0 0 2px rgba(200, 240, 255, .4), 0 0 10px rgba(127, 214, 255, .3);
 }
-.key-ico .ico { width: 14px; height: 14px; }
+.key-ico .ico { width: 11px; height: 11px; }
 .key-ico.sm { width: 17px; height: 17px; box-shadow: inset 0 0 0 1.5px rgba(200, 240, 255, .4); }
 .key-ico.sm .ico { width: 10px; height: 10px; }
 .gold-value.keys-value { color: #7fd6ff; }
@@ -154,8 +154,8 @@ body {
 /* Осколки Душ */
 .shards { border-color: #3d2f66; }
 .shard-ico {
-  width: 24px;
-  height: 24px;
+  width: 18px;
+  height: 18px;
   flex: none;
   display: grid;
   place-items: center;
@@ -164,7 +164,7 @@ body {
   background: radial-gradient(circle at 50% 50%, #d9b8ff 0 60%, #9a5cf0 62% 100%);
   box-shadow: inset 0 0 0 2px rgba(230, 210, 255, .4), 0 0 10px rgba(170, 110, 255, .35);
 }
-.shard-ico .ico { width: 14px; height: 14px; }
+.shard-ico .ico { width: 11px; height: 11px; }
 .shard-ico.sm { width: 17px; height: 17px; box-shadow: inset 0 0 0 1.5px rgba(230, 210, 255, .4); }
 .shard-ico.sm .ico { width: 10px; height: 10px; }
 .gold-value.shards-value { color: #d7b8ff; }
@@ -176,11 +176,12 @@ body {
 .shards.bump { animation: shardsBump .35s ease; }
 @media (prefers-reduced-motion: reduce) { .shards.bump { animation: none; } }
 
-.hud-right { display: grid; justify-items: end; gap: 4px; }
-.rebirth-tag { font-size: .72rem; color: var(--muted); }
+.hud-bottom { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.hud-tags { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+.tag-sep { font-size: .66rem; color: var(--muted); opacity: .5; }
+.rebirth-tag, .boss-tag { font-size: .66rem; color: var(--muted); white-space: nowrap; }
 .rebirth-tag b { color: #d7b8ff; font-variant-numeric: tabular-nums; }
 
-.boss-tag { font-size: .72rem; color: var(--muted); }
 .boss-tag b { color: #ff8a8a; font-variant-numeric: tabular-nums; }
 .boss-tag.here { color: #ffb3b3; }
 .boss-tag.here b { color: #ff4d4d; }
@@ -188,9 +189,9 @@ body {
 /* Плашка прогресса */
 .progress-pill {
   font-family: var(--font-serif);
-  font-size: 1rem;
+  font-size: .86rem;
   font-weight: 700;
-  padding: 6px 16px;
+  padding: 4px 12px;
   border-radius: 8px;
   color: #f3ead2;
   background: linear-gradient(180deg, #2b2438, #1b1626);
@@ -203,7 +204,7 @@ body {
 .bars {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: 8px;
 }
 .bar-block { min-width: 0; }
 .bar-head {
@@ -211,9 +212,9 @@ body {
   justify-content: space-between;
   align-items: baseline;
   gap: 6px;
-  font-size: .78rem;
+  font-size: .7rem;
   color: var(--muted);
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 .bar-head b {
   color: var(--text);
@@ -221,8 +222,8 @@ body {
   font-variant-numeric: tabular-nums;
 }
 .bar {
-  height: 14px;
-  border-radius: 7px;
+  height: 10px;
+  border-radius: 6px;
   background: #080b14;
   border: 1px solid var(--line);
   overflow: hidden;
@@ -1241,8 +1242,8 @@ body.modal-open { overflow: hidden; }
 .btn-icon:active { transform: translateY(1px) scale(.98); }
 .btn-icon .ico { width: 24px; height: 24px; }
 .btn-icon:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
-.btn-icon.sm { width: 38px; height: 38px; border-radius: 10px; }
-.btn-icon.sm .ico { width: 18px; height: 18px; }
+.btn-icon.sm { width: 30px; height: 30px; border-radius: 9px; }
+.btn-icon.sm .ico { width: 15px; height: 15px; }
 
 /* ==================== ОКНО НАСТРОЕК ЗВУКА ==================== */
 #settingsModal { z-index: 210; }   /* выше .loading (200) — настройки должны быть видны и поверх главного меню */
@@ -1382,15 +1383,16 @@ body.modal-open { overflow: hidden; }
 
 /* ============================== АДАПТИВ =================================== */
 @media (max-width: 420px) {
-  .hud-top { justify-content: center; }
-  .progress-pill { font-size: .95rem; padding: 6px 12px; }
+  .progress-pill { font-size: .8rem; padding: 4px 10px; }
+  .hud-bottom { flex-direction: column; align-items: flex-start; gap: 3px; }
+  .hud-tags { justify-content: flex-start; }
   .bars { gap: 8px; }
 }
 @media (min-width: 900px) {
   body { padding-top: 22px; }
   .app { gap: 14px; }
-  .hud { padding: 14px 18px 16px; }
-  .bar { height: 16px; }
+  .hud { padding: 9px 16px 10px; }
+  .bar { height: 12px; }
 }
 </style>
 </head>
@@ -1415,13 +1417,16 @@ body.modal-open { overflow: hidden; }
           <span class="gold-value shards-value" id="shardsValue" aria-label="Баланс Осколков Душ">0</span>
         </div>
       </div>
-      <div class="hud-right">
-        <div class="progress-pill" id="progressPill" aria-live="polite">Уровень 1 — Волна 1/5</div>
-        <div class="rebirth-tag" title="Совершено перерождений">Перерождений: <b id="rebirthCount">0</b></div>
-        <div class="boss-tag" id="bossTag" title="На каком уровне ждать следующего босса">Следующий босс: <b id="bossLevelText">5</b></div>
-        <button class="btn-icon sm" id="hudSettingsBtn" type="button" aria-haspopup="dialog" aria-controls="settingsModal" title="Настройки звука">
-          <svg class="ico" aria-hidden="true"><use href="#i-gear"></use></svg>
-        </button>
+      <button class="btn-icon sm" id="hudSettingsBtn" type="button" aria-haspopup="dialog" aria-controls="settingsModal" title="Настройки звука">
+        <svg class="ico" aria-hidden="true"><use href="#i-gear"></use></svg>
+      </button>
+    </div>
+    <div class="hud-bottom">
+      <div class="progress-pill" id="progressPill" aria-live="polite">Уровень 1 — Волна 1/5</div>
+      <div class="hud-tags">
+        <span class="rebirth-tag" title="Совершено перерождений">Перерождений: <b id="rebirthCount">0</b></span>
+        <span class="tag-sep" aria-hidden="true">·</span>
+        <span class="boss-tag" id="bossTag" title="На каком уровне ждать следующего босса">Следующий босс: <b id="bossLevelText">5</b></span>
       </div>
     </div>
 
@@ -1448,16 +1453,16 @@ body.modal-open { overflow: hidden; }
   <!-- ======================= БУСТЫ ЗА ПРОСМОТР РЕКЛАМЫ ===================== -->
   <div class="boosts" role="group" aria-label="Бусты за просмотр рекламы">
     <button class="boost" type="button" data-boost="damage" style="--accent:#ff8a2a;--accent-soft:rgba(255,138,42,.16)"
-            title="x2 Урон на 6 минут (за рекламу)" aria-label="За рекламу: x2 урон на 6 минут">
+            title="x2 Урон на 3 минуты (за рекламу)" aria-label="За рекламу: x2 урон на 3 минуты">
       <span class="boost-ico"><svg class="ico" aria-hidden="true"><use href="#i-bolt"></use></svg></span>
-      <span class="boost-text"><b>x2 Урон</b><small>6 мин</small></span>
+      <span class="boost-text"><b>x2 Урон</b><small>3 мин</small></span>
       <i class="boost-ad" aria-hidden="true"><svg class="ico"><use href="#i-play"></use></svg></i>
       <i class="boost-bar" aria-hidden="true"><i></i></i>
     </button>
     <button class="boost" type="button" data-boost="gold" style="--accent:#ffd54a;--accent-soft:rgba(255,213,74,.16)"
-            title="x2 Доход на 5 минут (за рекламу)" aria-label="За рекламу: x2 доход золота на 5 минут">
+            title="x2 Доход на 3 минуты (за рекламу)" aria-label="За рекламу: x2 доход золота на 3 минуты">
       <span class="boost-ico"><svg class="ico" aria-hidden="true"><use href="#i-ring"></use></svg></span>
-      <span class="boost-text"><b>x2 Доход</b><small>5 мин</small></span>
+      <span class="boost-text"><b>x2 Доход</b><small>3 мин</small></span>
       <i class="boost-ad" aria-hidden="true"><svg class="ico"><use href="#i-play"></use></svg></i>
       <i class="boost-bar" aria-hidden="true"><i></i></i>
     </button>
@@ -1668,7 +1673,7 @@ body.modal-open { overflow: hidden; }
 
   <!-- ====================== ВРЕМЕННЫЙ ОТЛАДОЧНЫЙ БЛОК ===================== -->
   <details class="debug" id="debugPanel" hidden>
-    <summary>Отладка (видна только локально или с ?debug)</summary>
+    <summary title="Видна только локально или с ?debug">🛠 Отладка</summary>
     <div class="debug-body">
       <div class="debug-title">Переход между уровнями и волнами (клавиши ← и → меняют уровень) и пополнение золота</div>
       <div class="debug-buttons">
@@ -1895,7 +1900,7 @@ body.modal-open { overflow: hidden; }
   const INTERSTITIAL_MAX_S = 420;
   const AD_START_TIMEOUT_MS = 8000;      // если реклама не открылась — снимаем паузу
   const AD_MAX_MS = 180000;              // страховка: реклама не может идти дольше 3 минут
-  const BOOST_DURATION = { damage: 360, gold: 300 };   // секунд за один просмотр
+  const BOOST_DURATION = { damage: 180, gold: 180 };   // секунд за один просмотр (3 минуты)
   const BOOST_MAX = 1800;                // потолок накопленного времени буста (30 мин)
   const BOOST_MULT = 2;                  // множитель бустов
   const KEYS_AD_REWARD = 3;              // ключей за просмотр
@@ -5276,7 +5281,7 @@ body.modal-open { overflow: hidden; }
     state.boosts[id] = Math.min(BOOST_MAX, state.boosts[id] + BOOST_DURATION[id]);
     updateBoosts();
     updateUI();
-    showToast(id === 'damage' ? 'x2 Урон на 6 минут!' : 'x2 Доход на 5 минут!');
+    showToast(id === 'damage' ? 'x2 Урон на 3 минуты!' : 'x2 Доход на 3 минуты!');
   }
 
   function requestBoost(id) {
