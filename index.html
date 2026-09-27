@@ -42,10 +42,10 @@
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
 html, body {
-  min-height: 100%;
   height: 100%;
-  overscroll-behavior-y: none;   /* не даём странице «оттягиваться» и провоцировать жесты платформы ВК */
-  touch-action: pan-y;           /* разрешаем только вертикальную прокрутку — pinch-zoom/свайпы платформе не мешаем */
+  overflow: hidden;               /* платформа ВК не даёт прокрутить страницу целиком — убираем эту потребность вовсе: */
+  overscroll-behavior: none;      /* «экран» игры статичен и всегда умещается в один viewport, */
+  touch-action: none;             /* а прокручивается только внутренняя панель меню (см. .tab-panel) */
 }
 
 body {
@@ -61,18 +61,22 @@ body {
     max(14px, env(safe-area-inset-bottom))
     max(10px, env(safe-area-inset-left));
   -webkit-font-smoothing: antialiased;
+  height: 100%;
+  overflow: hidden;
 }
 
 .app {
   width: 100%;
   max-width: 1000px;
+  height: 100%;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  overscroll-behavior-y: none;
-  touch-action: pan-y;
+  overflow: hidden;               /* сам «экран» (шапка+канвас+бусты+вкладки) статичен, не скроллится */
+  touch-action: none;
 }
+.hud, .stage, .boosts, .tabs { flex: none; }   /* фиксированные по высоте блоки — не сжимаются и не растут */
 
 /* ============================== HEADER / HUD ============================== */
 .hud {
@@ -336,6 +340,10 @@ body {
   background: linear-gradient(180deg, var(--panel-hi), var(--panel));
   border: 1px solid var(--line);
   border-radius: var(--radius);
+  flex: 1;                        /* дожимает весь оставшийся после шапки/канваса/бустов экран */
+  min-height: 0;                  /* без этого flex-контейнер не даст ребёнку сжаться меньше содержимого */
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
 }
 .tabs {
@@ -383,11 +391,12 @@ body {
 
 .tab-panel {
   padding: 12px;
-  min-height: 300px;
-  max-height: min(58vh, 520px);           /* внутри iframe ВК страница может не прокручиваться целиком — */
-  overflow-y: auto;                        /* поэтому длинный список улучшений/предметов скроллится сам, */
-  -webkit-overflow-scrolling: touch;       /* а когда список долистан до конца — скролл естественно */
-  touch-action: pan-y !important;          /* «перетекает» на остальную страницу (overscroll-behavior: auto по умолчанию) */
+  flex: 1;                        /* растягивается ровно на всё, что осталось внутри .dock ниже вкладок — */
+  min-height: 0;                  /* без магических vh/px, поэтому докручивается всегда до самого конца */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;  /* долистали до конца списка — дальше пальцем «протащить» весь экран нельзя, экран статичен */
+  touch-action: pan-y !important;
 }
 .tab-panel[hidden] { display: none; }
 
@@ -1329,13 +1338,25 @@ body.modal-open { overflow: hidden; }
 
 /* ============================ ОТЛАДОЧНЫЙ БЛОК ============================= */
 .debug {
-  padding: 10px 12px;
+  position: fixed;                /* статичный экран больше не скроллится — плавающая панель остаётся достижимой всегда */
+  left: auto;
+  right: max(10px, env(safe-area-inset-right));
+  bottom: max(10px, env(safe-area-inset-bottom));
+  z-index: 300;
+  max-height: 45vh;
+  max-width: min(92vw, 320px);     /* компактная «таблетка» в углу — не перекрывает контент вкладок */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y !important;
+  padding: 8px 10px;
   border: 1px dashed var(--line);
   border-radius: var(--radius);
-  background: rgba(18, 24, 40, .55);
-  width: 100%;
-  max-width: 100%;
+  background: rgba(10, 14, 24, .92);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .5);
+  width: fit-content;   /* по умолчанию (details закрыт) — узкая «таблетка» по размеру заголовка, не полоса */
 }
+.debug[open] { width: min(92vw, 320px); }   /* открытый список кнопок — уже во всю заявленную ширину */
 .debug summary { cursor: pointer; font-size: .85rem; color: var(--muted); }
 .debug[open] summary { margin-bottom: 8px; }
 .debug-body { display: grid; gap: 8px; }
@@ -1843,7 +1864,7 @@ body.modal-open { overflow: hidden; }
   const BANNER_TIME = 1.4;       // время показа баннера на canvas
 
   // Сундуки и экипировка
-  const START_KEYS = 10;         // ключей при старте (для теста)
+  const START_KEYS = 1;          // ключей при старте
   const KEY_DROP_ENEMY = 0.15;   // шанс ключа с обычного врага
   const KEY_DROP_BOSS = 0.5;     // шанс ключа с босса
   const INVENTORY_SIZE = 30;     // число ячеек инвентаря
