@@ -4388,6 +4388,12 @@ body.modal-open { overflow: hidden; }
     item: null, timer: 0, opener: null
   };
 
+  // Пересчитывает body.modal-open с нуля по фактическому состоянию всех модальных окон —
+  // так класс не может «залипнуть», даже если одно окно закрылось нестандартным путём.
+  function syncModalOpenClass() {
+    document.body.classList.toggle('modal-open', lootOpen() || offlineOpen() || settingsOpen());
+  }
+
   function lootOpen() {
     return !loot.root.hidden;
   }
@@ -4459,7 +4465,7 @@ body.modal-open { overflow: hidden; }
     if (loot.root.hidden) {
       loot.opener = document.activeElement;
       loot.root.hidden = false;
-      document.body.classList.add('modal-open');
+      syncModalOpenClass();
     }
     p.focus({ preventScroll: true });
 
@@ -4480,7 +4486,7 @@ body.modal-open { overflow: hidden; }
     clearTimeout(loot.timer);
     loot.root.hidden = true;
     loot.item = null;
-    document.body.classList.remove('modal-open');
+    syncModalOpenClass();
     const back = loot.opener;
     loot.opener = null;
     if (back && back !== document.body && document.contains(back) && !back.disabled) back.focus({ preventScroll: true });
@@ -5316,7 +5322,7 @@ body.modal-open { overflow: hidden; }
     offlineEl.claim.disabled = false;
     offlineEl.double.disabled = false;
     offlineEl.root.hidden = false;
-    document.body.classList.add('modal-open');
+    syncModalOpenClass();
     offlineEl.panel.focus({ preventScroll: true });
     offlineEl.claim.focus({ preventScroll: true });
   }
@@ -5324,7 +5330,7 @@ body.modal-open { overflow: hidden; }
   function closeOffline() {
     if (!offlineOpen()) return;
     offlineEl.root.hidden = true;
-    document.body.classList.remove('modal-open');
+    syncModalOpenClass();
     const back = offlineEl.opener;
     offlineEl.opener = null;
     if (back && back !== document.body && document.contains(back) && !back.disabled) back.focus({ preventScroll: true });
@@ -5704,14 +5710,14 @@ body.modal-open { overflow: hidden; }
     if (settingsOpen()) return;
     setEl.opener = document.activeElement;
     setEl.root.hidden = false;
-    document.body.classList.add('modal-open');
+    syncModalOpenClass();
     setEl.panel.focus({ preventScroll: true });
   }
 
   function closeSettings() {
     if (!settingsOpen()) return;
     setEl.root.hidden = true;
-    document.body.classList.remove('modal-open');
+    syncModalOpenClass();
     const back = setEl.opener;
     setEl.opener = null;
     if (back && back !== document.body && document.contains(back) && !back.disabled) back.focus({ preventScroll: true });
@@ -5758,6 +5764,7 @@ body.modal-open { overflow: hidden; }
   renderGear();
   setStage(state.level, state.wave);
   requestAnimationFrame(frame);
+  syncModalOpenClass();                      // подчистить class на body, если он вдруг остался с предыдущей загрузки
   boot();                                   // экран загрузки → SDK → сохранение → офлайн-награда
 
   // Доступ из консоли для отладки и дальнейших шагов разработки
