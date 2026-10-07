@@ -5628,12 +5628,14 @@ body.modal-open { overflow: hidden; }
       for (const entry of this.pools.values()) {
         if (entry.isBgm) continue;    // BGM запускается по-настоящему через playBgm() сразу следом —
         for (const el of entry.elements) {   // отдельный «прогрев» с паузой ей не нужен и может гонкой оборвать реальный старт
-          const p = el.play();
-          if (p && typeof p.catch === 'function') {
-            p.then(() => { el.pause(); el.currentTime = 0; }).catch(() => { /* автозапуск заблокирован — попробуем позже, по следующему жесту */ });
-          } else {
-            el.pause(); el.currentTime = 0;
-          }
+          try {
+            const p = el.play();
+            if (p && typeof p.catch === 'function') {
+              p.then(() => { el.pause(); el.currentTime = 0; }).catch(() => { /* автозапуск заблокирован — попробуем позже, по следующему жесту */ });
+            } else {
+              el.pause(); el.currentTime = 0;
+            }
+          } catch (err) { /* не даём сбою прогрева оборвать остальной обработчик клика (и запуск музыки следом) */ }
         }
       }
     }
@@ -5679,13 +5681,36 @@ body.modal-open { overflow: hidden; }
       const entry = this.pools.get(name);
       if (!entry) return;
       const el = entry.elements[0];
-      el.loop = true;
+      el.loop = true;                   // обязательное зацикливание — перезапускается сама сразу по окончании
       el.currentTime = 0;
       el.volume = this.bgmMuted ? 0 : clamp01(this.bgmVolume);
-      const p = el.play();
-      if (p && typeof p.catch === 'function') p.catch(() => { /* автозапуск заблокирован до жеста пользователя — не критично */ });
       this.bgmEl = el;
       this.bgmName = name;
+      this._tryPlayBgm();
+    }
+
+    // Пытается запустить текущий bgmEl. Если браузер блокирует автовоспроизведение (Autoplay Policy —
+    // частая история именно на реальном хостинге вроде GitHub Pages, в отличие от локального файла),
+    // подписываемся на самый первый следующий клик/тап/нажатие клавиши ГДЕ УГОДНО на странице и повторяем
+    // попытку — это гарантированно происходит внутри настоящего жеста пользователя и срабатывает всегда.
+    _tryPlayBgm() {
+      if (!this.bgmEl) return;
+      let p;
+      try { p = this.bgmEl.play(); } catch (err) { p = null; }
+      if (p && typeof p.catch === 'function') p.catch(() => this._armBgmRetry());
+    }
+
+    _armBgmRetry() {
+      if (this._bgmRetryArmed) return;
+      this._bgmRetryArmed = true;
+      const retry = () => {
+        this._bgmRetryArmed = false;
+        document.removeEventListener('pointerdown', retry, true);
+        document.removeEventListener('keydown', retry, true);
+        this._tryPlayBgm();
+      };
+      document.addEventListener('pointerdown', retry, true);
+      document.addEventListener('keydown', retry, true);
     }
 
     stopBgm() {
@@ -5703,7 +5728,9 @@ body.modal-open { overflow: hidden; }
   // сюда (пути — относительные, без ведущего слеша, например 'assets/audio/click.mp3') —
   // весь остальной код (AudioManager, слайдеры громкости, точки воспроизведения в бою) не менялся
   // и заработает как прежде, ничего больше трогать не нужно.
-  const AUDIO_MANIFEST = [];
+  const AUDIO_MANIFEST = [
+    { name: 'bgm', url: 'bgm.mp3' }     // фоновая музыка; путь относительный — работает и на file://, и на GitHub Pages
+  ];
   const MENU_BG_URL = null;         // фон меню отключён — используется CSS-градиент из .menu-bg
 
   /* ---------- Прелоадер: картинка + звуки, параллельно с boot() (SDK/сохранение) ---------- */
@@ -5768,8 +5795,8 @@ body.modal-open { overflow: hidden; }
 
   // «Играть»: разблокируем звук по жесту пользователя, запускаем музыку и закрываем экран поверх canvas
   menuEl.playBtn.addEventListener('click', () => {
+    audio.playBgm('bgm');                    // запускаем музыку первой же строкой — как можно ближе к самому жесту клика
     audio.unlock();
-    audio.playBgm('bgm');
     hideLoading();
     setTimeout(maybeStartTutorial, 450);     // даём экрану загрузки полностью скрыться, затем показываем гид (если ещё не видели)
   });
