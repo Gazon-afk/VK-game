@@ -91,7 +91,7 @@ body {
 .hud-top {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 10px;
   flex-wrap: wrap;
 }
@@ -1469,14 +1469,14 @@ body.modal-open { overflow: hidden; }
           <span class="shard-ico" aria-hidden="true"><svg class="ico"><use href="#i-shard"></use></svg></span>
           <span class="gold-value shards-value" id="shardsValue" aria-label="Баланс Осколков Душ">0</span>
         </div>
-      </div>
-      <div class="hud-actions">
-        <button class="btn-icon sm" id="hudMenuBtn" type="button" title="Главное меню">
-          <svg class="ico" aria-hidden="true"><use href="#i-home"></use></svg>
-        </button>
-        <button class="btn-icon sm" id="hudSettingsBtn" type="button" aria-haspopup="dialog" aria-controls="settingsModal" title="Настройки звука">
-          <svg class="ico" aria-hidden="true"><use href="#i-gear"></use></svg>
-        </button>
+        <div class="hud-actions">
+          <button class="btn-icon sm" id="hudMenuBtn" type="button" title="Главное меню">
+            <svg class="ico" aria-hidden="true"><use href="#i-home"></use></svg>
+          </button>
+          <button class="btn-icon sm" id="hudSettingsBtn" type="button" aria-haspopup="dialog" aria-controls="settingsModal" title="Настройки звука">
+            <svg class="ico" aria-hidden="true"><use href="#i-gear"></use></svg>
+          </button>
+        </div>
       </div>
     </div>
     <div class="hud-bottom">
