@@ -1470,10 +1470,7 @@ body.modal-open { overflow: hidden; }
           <span class="gold-value shards-value" id="shardsValue" aria-label="Баланс Осколков Душ">0</span>
         </div>
         <div class="hud-actions">
-          <button class="btn-icon sm" id="hudMenuBtn" type="button" title="Главное меню">
-            <svg class="ico" aria-hidden="true"><use href="#i-home"></use></svg>
-          </button>
-          <button class="btn-icon sm" id="hudSettingsBtn" type="button" aria-haspopup="dialog" aria-controls="settingsModal" title="Настройки звука">
+          <button class="btn-icon sm" id="hudSettingsBtn" type="button" aria-haspopup="dialog" aria-controls="settingsModal" title="Настройки">
             <svg class="ico" aria-hidden="true"><use href="#i-gear"></use></svg>
           </button>
         </div>
@@ -1785,7 +1782,7 @@ body.modal-open { overflow: hidden; }
         <svg class="ico" aria-hidden="true"><use href="#i-play"></use></svg>
         <span>Играть</span>
       </button>
-      <button class="btn-icon" id="menuSettingsBtn" type="button" aria-haspopup="dialog" aria-controls="settingsModal" title="Настройки звука">
+      <button class="btn-icon" id="menuSettingsBtn" type="button" aria-haspopup="dialog" aria-controls="settingsModal" title="Настройки">
         <svg class="ico" aria-hidden="true"><use href="#i-gear"></use></svg>
       </button>
     </div>
@@ -1818,7 +1815,7 @@ body.modal-open { overflow: hidden; }
   <div class="modal-backdrop"></div>
   <div class="dialog settings-dialog" id="settingsPanel" role="dialog" aria-modal="true" aria-labelledby="settingsTitle" tabindex="-1">
     <svg class="ico dialog-ico" aria-hidden="true"><use href="#i-gear"></use></svg>
-    <h2 id="settingsTitle">Настройки звука</h2>
+    <h2 id="settingsTitle">Настройки</h2>
 
     <div class="sound-row">
       <div class="sound-row-head">
@@ -1832,6 +1829,7 @@ body.modal-open { overflow: hidden; }
     </div>
 
     <button class="btn" id="settingsTutorialBtn" type="button">Показать обучение заново</button>
+    <button class="btn" id="settingsMenuBtn" type="button">Выйти в главное меню</button>
     <div class="dialog-actions single">
       <button class="btn primary" id="settingsCloseBtn" type="button">Готово</button>
     </div>
@@ -5810,9 +5808,7 @@ body.modal-open { overflow: hidden; }
     loadingEl.hidden = false;
     showMainMenu();
   }
-  document.getElementById('hudMenuBtn').addEventListener('click', returnToMenu);
-
-  /* ---------- Настройки звука (доступны из меню и позже — из отладочной панели) ---------- */
+  /* ---------- Настройки (звук + выход в меню) ---------- */
 
   const setEl = {
     root:   document.getElementById('settingsModal'),
@@ -5855,6 +5851,7 @@ body.modal-open { overflow: hidden; }
   document.getElementById('hudSettingsBtn').addEventListener('click', () => { audio.unlock(); openSettings(); });
   setEl.closeBtn.addEventListener('click', closeSettings);
   document.getElementById('settingsTutorialBtn').addEventListener('click', () => { closeSettings(); startTutorial(); });
+  document.getElementById('settingsMenuBtn').addEventListener('click', () => { closeSettings(); returnToMenu(); });
   setEl.root.querySelector('.modal-backdrop').addEventListener('click', closeSettings);
 
   setEl.bgmSlider.addEventListener('input', () => {
